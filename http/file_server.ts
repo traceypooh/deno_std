@@ -338,6 +338,7 @@ async function serveDirIndex(
   return new Response(page, { status: Status.OK, headers });
 }
 
+let FINAL_HANDLER: any = null;
 function serveFallback(_req: Request, e: Error): Promise<Response> {
   if (e instanceof URIError) {
     return Promise.resolve(
@@ -347,6 +348,7 @@ function serveFallback(_req: Request, e: Error): Promise<Response> {
       }),
     );
   } else if (e instanceof Deno.errors.NotFound) {
+    if (FINAL_HANDLER) return FINAL_HANDLER(_req);
     return Promise.resolve(
       new Response(STATUS_TEXT[Status.NotFound], {
         status: Status.NotFound,
@@ -651,7 +653,9 @@ function normalizeURL(url: string): string {
     : normalizedUrl;
 }
 
-function main() {
+function main(final_hanlder: any = null) {
+  if (final_handler) FINAL_HANDLER = final_handler;
+
   const serverArgs = parse(Deno.args, {
     string: ["port", "host", "cert", "key"],
     boolean: ["help", "dir-listing", "dotfiles", "cors", "verbose"],
