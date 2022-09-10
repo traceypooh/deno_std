@@ -751,3 +751,5 @@ OPTIONS:
 if (import.meta.main) {
   main();
 }
+
+export default main
