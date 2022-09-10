@@ -653,7 +653,7 @@ function normalizeURL(url: string): string {
     : normalizedUrl;
 }
 
-function main(final_hanlder: any = null) {
+function main(final_handler: any = null) {
   if (final_handler) FINAL_HANDLER = final_handler;
 
   const serverArgs = parse(Deno.args, {
